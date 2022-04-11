@@ -1,7 +1,9 @@
 package com.example.webflux.service;
 
+import com.example.webflux.controller.ErrorResult;
 import com.example.webflux.exception.ContentException;
 import com.example.webflux.exception.EventErrorCode;
+import com.example.webflux.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,7 +17,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApiControllerAdvice {
-    private ErrorService errorService;
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -28,14 +29,23 @@ public class ApiControllerAdvice {
 
 
 
-
-    @ExceptionHandler(ContentException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(ContentException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors()
-                .forEach(c -> errors.put(((FieldError) c).getField(), c.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(errors);
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResult> not(NotFoundException e){
+        ErrorResult errorResult = new ErrorResult();
+        errorResult.setCode(e.getCode());
+        errorResult.setMessage(e.getMessage());
+        errorResult.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResult);
     }
+
+//
+//    @ExceptionHandler(ContentException.class)
+//    public ResponseEntity<Map<String, String>> handleValidationExceptions(ContentException ex) {
+//        Map<String, String> errors = new HashMap<>();
+//        ex.getBindingResult().getAllErrors()
+//                .forEach(c -> errors.put(((FieldError) c).getField(), c.getDefaultMessage()));
+//        return ResponseEntity.badRequest().body(errors);
+//    }
 //    @ExceptionHandler(ContentException.class)
 //    public String exceptionHandler(ContentException ex){
 //        String a = ex.getMessage();
@@ -70,4 +80,5 @@ public class ApiControllerAdvice {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
 //
 //        }
+
     }

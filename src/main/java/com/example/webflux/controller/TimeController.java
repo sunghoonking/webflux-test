@@ -3,6 +3,7 @@ package com.example.webflux.controller;
 import com.example.webflux.dto.EventResponseDto;
 import com.example.webflux.exception.ContentException;
 import com.example.webflux.exception.EventErrorCode;
+import com.example.webflux.exception.NotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,9 +24,12 @@ public class TimeController {
         //todo timeMin, timeMax validation 같은 검증 로직 추가 필요
         Duration duration = Duration.between(timeMin, timeMax);
 
+
         System.out.println(duration.getSeconds());
+        System.out.println(EventErrorCode.BROKEN_FORMAT_DATEDATA.getErrorMessage());
         if(duration.getSeconds() <= 0){
-            throw new ContentException(EventErrorCode.BROKEN_FORMAT_DATEDATA);
+            throw new NotFoundException(EventErrorCode.BROKEN_FORMAT_DATEDATA.getErrorCode(),EventErrorCode.BROKEN_FORMAT_DATEDATA.getErrorMessage());
+
         } else {
             throw new IllegalArgumentException("안녕");
         }

@@ -4,25 +4,24 @@ package com.example.webflux.exception;
 public enum EventErrorCode {
 
 
-    NOT_FOUND_EVENT("이벤트를 찾지 못했습니다.", 500),
 
-    BROKEN_FORMAT_DATEDATA("시작 시간이 종료시간보다 작아야 합니다", 500);
+    BROKEN_FORMAT_DATEDATA(500, "시작 시간이 종료시간보다 작아야 합니다"),
 
+    BOARD_NOT_FOUND(1002, "게시글을 찾을 수 없습니다.");
 
-    public String getMessage() {
-        return message;
+    private int errorCode;
+    private String errorMessage;
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
-    public int getCode() {
-        return code;
+
+    public int getErrorCode() {
+        return errorCode;
     }
 
-
-    EventErrorCode(String message, int code) {
-        this.message = message;
-        this.code = code;
+    EventErrorCode(int errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
     }
-    private final String message;
-
-
-    private final int code;
 }

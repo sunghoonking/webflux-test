@@ -4,21 +4,16 @@ package com.example.webflux.exception;
 import org.springframework.validation.Errors;
 
 public class ContentException extends RuntimeException {
-    private EventErrorCode eventErrorCode;
+    private int eventErrorCode;
     private String detailMessage;
 
 
-    public ContentException(){
+    public ContentException(int code, String message){
         super();
     }
 
-    public ContentException(EventErrorCode eventErrorCode){
-        super(eventErrorCode.getMessage());
-        this.eventErrorCode = eventErrorCode;
-        this.detailMessage = eventErrorCode.getMessage();
-    }
 
-    public EventErrorCode getEventErrorCode() {
+    public int getEventErrorCode() {
         return eventErrorCode;
     }
 
@@ -29,4 +24,5 @@ public class ContentException extends RuntimeException {
     public Errors getBindingResult() {
         return null;
     }
+
 }
